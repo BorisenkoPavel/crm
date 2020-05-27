@@ -6,7 +6,7 @@
       .app-page
         router-view
     .fixed-action-btn
-      a.btn-floating.btn-large.blue(href='#')
+      router-link.btn-floating.btn-large.blue(to="/record")
         i.large.material-icons add
 </template>
 
@@ -15,13 +15,13 @@ import NavList from "@/components/app/nav-list";
 import SideBar from "@/components/app/side-bar";
 
 export default {
-	name: "main-layout",
-	data: () => ({
-		isOpen: true,
-	}),
-	components: {
-		NavList,
-		SideBar,
-	},
+  name: "main-layout",
+  data: () => ({
+    isOpen: true
+  }),
+  components: {
+    NavList,
+    SideBar
+  }
 };
 </script>

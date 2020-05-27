@@ -57,7 +57,7 @@ const routes = [
     name: "record",
     meta: { layout: "main" },
     component: () => import("@/views/record.vue")
-  },
+  }
 ];
 
 const router = new VueRouter({

@@ -4,20 +4,49 @@
 				.navbar-left
 					a(href='#' @click.prevent='$emit("click")')
 						i.material-icons.black-text dehaze
-					span.black-text 12.12.12
+					span.black-text {{date | date('datetime')}}
 				ul.right.hide-on-small-and-down
 					li
-						a.dropdown-trigger.black-text(href='#', data-target='dropdown')
+						a.dropdown-trigger.black-text(href='#', data-target='dropdown' ref='dropdown')
 							| USER NAME
 							i.material-icons.right arrow_drop_down
 						ul#dropdown.dropdown-content
 							li
-								a.black-text(href='#')
+								router-link.black-text(to='/profile')
 									i.material-icons account_circle
 									| Профиль
 							li.divider(tabindex='-1')
 							li
-								a.black-text(href='#')
+								a.black-text(href="" @click.prevent="logout")
 									i.material-icons assignment_return
 									| Выйти
 </template>
+
+<script>
+export default {
+	data: () => ({ 
+		date: new Date(),
+		interval: null,
+		dropdown: null
+	}),
+	methods: {
+		logout() {
+			this.$router.push('/login?message=logout')
+		}
+	},
+	mounted() {
+		this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
+			constrainWidth: true
+		})
+		this.interval = setInterval(() => {
+			this.date = new Date()
+		},1000)
+	},
+	beforeDestroy() {
+		clearInterval(this.interval)
+		if(this.dropdown && this.dropdown.destroy) {
+			this.dropdown.destroy()
+		}
+	}
+};
+</script>
