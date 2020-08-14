@@ -1,9 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
+import Home from "@/views/home"
+import firebase from 'firebase/app'
 Vue.use(VueRouter);
 
-const routes = [
+const router = new VueRouter({
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes: [
   {
     path: "/login",
     name: "login",
@@ -18,52 +22,58 @@ const routes = [
   },
   {
     path: "/",
-    name: "home",
-    meta: { layout: "main" },
+    name: "Home",
+    meta: { layout: "main", auth: "true" },
     component: () => import("@/views/home.vue")
   },
   {
     path: "/categories",
     name: "categories",
-    meta: { layout: "main" },
+    meta: { layout: "main", auth: "true" },
     component: () => import("@/views/categories.vue")
   },
   {
-    path: "/detail",
+    path: "/detail/:id",
     name: "detail",
-    meta: { layout: "main" },
+    meta: { layout: "main", auth: "true" },
     component: () => import("@/views/detail.vue")
   },
   {
     path: "/history",
     name: "history",
-    meta: { layout: "main" },
+    meta: { layout: "main", auth: "true" },
     component: () => import("@/views/history.vue")
   },
   {
     path: "/planning",
     name: "planning",
-    meta: { layout: "main" },
+    meta: { layout: "main", auth: "true" },
     component: () => import("@/views/planning.vue")
   },
   {
     path: "/profile",
     name: "profile",
-    meta: { layout: "main" },
+    meta: { layout: "main", auth: "true" },
     component: () => import("@/views/profile.vue")
   },
   {
     path: "/record",
     name: "record",
-    meta: { layout: "main" },
+    meta: { layout: "main", auth: "true" },
     component: () => import("@/views/record.vue")
   }
-];
+]
 
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes
 });
+
+router.beforeEach((to, from, next) => {
+  const currentUser = firebase.auth().currentUser
+  const requireAuth = to.matched.some(record => record.meta.auth)
+  if(requireAuth && !currentUser) {
+    next('/login?message=log')
+  } else {
+    next()
+  }
+})
 
 export default router;
